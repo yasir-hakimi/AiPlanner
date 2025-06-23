@@ -14,6 +14,7 @@ export default function HomePage() {
       description: 'Structured study time for focused, productive blocks.',
       imageUrl: 'https://placehold.co/600x400',
       imageHint: 'student studying',
+      href: '/study-plan',
     },
     {
       emoji: '🏋️',
@@ -29,6 +30,7 @@ export default function HomePage() {
       description: 'Organize productive time into clear, impact-focused tasks.',
       imageUrl: 'https://placehold.co/600x400',
       imageHint: 'person working laptop',
+      href: '/work-plan',
     },
     {
       emoji: '📘',
@@ -36,6 +38,7 @@ export default function HomePage() {
       description: 'A focused plan to excel in your coursework and exams.',
       imageUrl: 'https://placehold.co/600x400',
       imageHint: 'person studying desk',
+      href: '/study-plan',
     },
     {
       emoji: '🏋️',
@@ -51,6 +54,7 @@ export default function HomePage() {
       description: 'Streamline your workflow and achieve your professional goals.',
       imageUrl: 'https://placehold.co/600x400',
       imageHint: 'professional office',
+      href: '/work-plan',
     },
   ];
 
