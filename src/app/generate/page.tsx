@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import { Suspense, useState, useEffect } from "react";
+import { useSearchParams } from "next/navigation";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { PlanForm } from "@/components/plan-form";
 import { PlanDisplay } from "@/components/plan-display";
@@ -9,10 +10,33 @@ import { ThemeToggle } from "@/components/theme-toggle";
 import { generatePlan, type GeneratePlanInput } from "@/ai/flows/generate-plan";
 import { useToast } from "@/hooks/use-toast";
 
-export default function GeneratePage() {
+function GeneratePageContent() {
+  const searchParams = useSearchParams();
   const [isLoading, setIsLoading] = useState(false);
   const [plan, setPlan] = useState<string | null>(null);
   const { toast } = useToast();
+
+  const [defaultValues, setDefaultValues] = useState<Partial<GeneratePlanInput>>({});
+
+  useEffect(() => {
+    const topic = searchParams.get("topic") as GeneratePlanInput['topic'] | null;
+    const tasks = searchParams.get("tasks");
+    const availableTime = searchParams.get("availableTime");
+    const duration = searchParams.get("duration") as GeneratePlanInput['duration'] | null;
+    const goals = searchParams.get("goals");
+
+    const newDefaultValues: Partial<GeneratePlanInput> = {};
+    if (topic) newDefaultValues.topic = topic;
+    if (tasks) newDefaultValues.tasks = tasks;
+    if (availableTime) newDefaultValues.availableTime = availableTime;
+    if (duration) newDefaultValues.duration = duration;
+    if (goals) newDefaultValues.goals = goals;
+    
+    if (Object.keys(newDefaultValues).length > 0) {
+      setDefaultValues(newDefaultValues);
+    }
+  }, [searchParams]);
+
 
   const handleGeneratePlan = async (data: GeneratePlanInput) => {
     setIsLoading(true);
@@ -46,7 +70,12 @@ export default function GeneratePage() {
             <CardTitle className="font-headline">Create Your Plan</CardTitle>
           </CardHeader>
           <CardContent>
-            <PlanForm onGenerate={handleGeneratePlan} isLoading={isLoading} />
+            <PlanForm
+              key={JSON.stringify(defaultValues)}
+              onGenerate={handleGeneratePlan}
+              isLoading={isLoading}
+              defaultValues={defaultValues}
+            />
           </CardContent>
         </Card>
         {isLoading && <LoadingSpinner />}
@@ -54,4 +83,13 @@ export default function GeneratePage() {
       </main>
     </div>
   );
+}
+
+
+export default function GeneratePage() {
+  return (
+    <Suspense fallback={<div className="flex justify-center items-center min-h-screen"><LoadingSpinner/></div>}>
+      <GeneratePageContent />
+    </Suspense>
+  )
 }

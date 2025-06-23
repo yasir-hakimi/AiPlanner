@@ -21,6 +21,7 @@ export default function HomePage() {
       description: 'Transform your fitness with energizing, strength-building sessions.',
       imageUrl: 'https://placehold.co/600x400',
       imageHint: 'man gym',
+      href: '/fitness-plan',
     },
     {
       emoji: '🧠',
@@ -42,6 +43,7 @@ export default function HomePage() {
       description: 'A plan to maximize your gains and energize your workouts.',
       imageUrl: 'https://placehold.co/600x400',
       imageHint: 'gym workout',
+      href: '/fitness-plan',
     },
     {
       emoji: '🧠',
@@ -111,16 +113,25 @@ export default function HomePage() {
           <h2 className="text-3xl md:text-4xl font-bold">Explore Sample Plans</h2>
           <p className="text-gray-400 mt-2">10+ Templates</p>
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mt-12">
-            {samplePlans.map((plan, index) => (
-              <SamplePlanCard
-                key={index}
-                emoji={plan.emoji}
-                title={plan.title}
-                description={plan.description}
-                imageUrl={plan.imageUrl}
-                imageHint={plan.imageHint}
-              />
-            ))}
+            {samplePlans.map((plan, index) => {
+              const card = (
+                <SamplePlanCard
+                  emoji={plan.emoji}
+                  title={plan.title}
+                  description={plan.description}
+                  imageUrl={plan.imageUrl}
+                  imageHint={plan.imageHint}
+                />
+              );
+              if (plan.href) {
+                return (
+                  <Link href={plan.href} key={index} className="no-underline">
+                    {card}
+                  </Link>
+                );
+              }
+              return <div key={index}>{card}</div>;
+            })}
           </div>
           <div className="text-center mt-16">
               <Button variant="outline" className="rounded-full border-gray-600 hover:bg-gray-800 hover:text-white px-6">See More +</Button>

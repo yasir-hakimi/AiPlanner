@@ -35,15 +35,18 @@ const formSchema = z.object({
 interface PlanFormProps {
   onGenerate: (data: GeneratePlanInput) => void;
   isLoading: boolean;
+  defaultValues?: Partial<GeneratePlanInput>;
 }
 
-export function PlanForm({ onGenerate, isLoading }: PlanFormProps) {
+export function PlanForm({ onGenerate, isLoading, defaultValues }: PlanFormProps) {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      tasks: "",
-      availableTime: "",
-      goals: "",
+      topic: defaultValues?.topic,
+      tasks: defaultValues?.tasks || "",
+      availableTime: defaultValues?.availableTime || "",
+      duration: defaultValues?.duration,
+      goals: defaultValues?.goals || "",
     },
   });
 
